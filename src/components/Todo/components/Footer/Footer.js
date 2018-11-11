@@ -1,10 +1,9 @@
 import React from 'react';
+import * as RouteConstants from '../../../../constants/Route';
+import NavItem from './components/NavItem';
 
-export default ({ totalItems, itemsLeft, onRemoveCompleted }) => {
-  let itemText = 'items';
-  if (itemsLeft === 1) {
-    itemText = 'item';
-  }
+const Footer = ({ totalItems, itemsLeft, onRemoveCompleted }) => {
+  const itemText = itemsLeft === 1 ? 'item' : 'items';
 
   return (
     <>
@@ -13,15 +12,13 @@ export default ({ totalItems, itemsLeft, onRemoveCompleted }) => {
       </span>
       <ul className="filters">
         <li>
-          <a className="selected" href="#/">
-            All
-          </a>
+          <NavItem route={RouteConstants.Index}>All</NavItem>
         </li>
         <li>
-          <a href="#/active">Active</a>
+          <NavItem route={RouteConstants.Active}>Active</NavItem>
         </li>
         <li>
-          <a href="#/completed">Completed</a>
+          <NavItem route={RouteConstants.Completed}>Completed</NavItem>
         </li>
       </ul>
       {itemsLeft < totalItems && (
@@ -32,3 +29,5 @@ export default ({ totalItems, itemsLeft, onRemoveCompleted }) => {
     </>
   );
 };
+
+export default Footer;

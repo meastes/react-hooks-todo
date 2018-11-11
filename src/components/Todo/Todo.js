@@ -76,11 +76,22 @@ export default class Todo extends React.Component {
   }
 
   render() {
+    const { show } = this.props;
     const { todos: originalTodos, completed } = this.state;
-    const todos = originalTodos.map((todo) => ({
+    let todos = originalTodos.map((todo) => ({
       ...todo,
       completed: completed.includes(todo.id),
     }));
+    if (show) {
+      todos = todos.filter(({ completed }) => {
+        if (show === 'active') {
+          return !completed;
+        } else if (show === 'completed') {
+          return completed;
+        }
+        throw Error(`Invalid show prop: ${show}`);
+      });
+    }
 
     return (
       <section className="todoapp">
