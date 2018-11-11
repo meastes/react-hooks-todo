@@ -10,7 +10,6 @@ export default class NewTodo extends React.Component {
   };
 
   handleKeypress = (event) => {
-    console.log(event);
     if (event.key === 'Enter') {
       this.props.onNewTodo(this.state.description);
       this.setState({ description: '' });
