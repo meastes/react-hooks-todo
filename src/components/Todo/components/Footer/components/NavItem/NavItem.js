@@ -2,12 +2,10 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 
 const NavItem = ({ location, route, children }) => {
-  function getClassName(route) {
-    return location.pathname === route ? 'selected' : '';
-  }
+  const className = location.pathname === route ? 'selected' : '';
 
   return (
-    <Link className={getClassName(route)} to={route}>
+    <Link className={className} to={route}>
       {children}
     </Link>
   );
