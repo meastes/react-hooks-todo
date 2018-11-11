@@ -15,7 +15,7 @@ export default class Todo extends React.Component {
     completed: [0],
   };
 
-  handleTodoToggle = (id) => {
+  hangleToddleTodo = (id) => {
     const { completed } = this.state;
     const stateChanges = {};
 
@@ -39,6 +39,17 @@ export default class Todo extends React.Component {
     }
 
     this.setState(stateChanges);
+  };
+
+  handleRemoveTodo = (id) => {
+    const todos = this.state.todos.filter((todo) => id !== todo.id);
+    const completed = this.state.completed.filter((completedId) => id !== completedId);
+    this.setState({ todos, completed });
+  };
+
+  handleRemoveCompleted = () => {
+    const todos = this.state.todos.filter((todo) => ~todo.completed);
+    this.setState({ todos, completed: [] });
   };
 
   get numberTotalItems() {
@@ -70,8 +81,9 @@ export default class Todo extends React.Component {
           <List
             todos={todos}
             isAllCompleted={this.isAllCompleted}
-            onTodoToggle={this.handleTodoToggle}
+            onToggleTodo={this.hangleToddleTodo}
             onToggleAll={this.handleToggleAll}
+            onRemoveTodo={this.handleRemoveTodo}
           />
         </main>
         <footer className="footer">

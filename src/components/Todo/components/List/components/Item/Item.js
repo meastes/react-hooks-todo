@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default ({ description, completed, editing, onToggle }) => {
+export default ({ description, completed, editing, onToggle, onRemove }) => {
   let className = '';
   if (completed) {
     className = 'completed';
@@ -13,7 +13,7 @@ export default ({ description, completed, editing, onToggle }) => {
       <div className="view">
         <input className="toggle" type="checkbox" checked={completed} onChange={onToggle} />
         <label>{description}</label>
-        <button className="destroy" />
+        <button className="destroy" onClick={onRemove} />
       </div>
       <input className="edit" value="Create a TodoMVC template" />
     </li>
