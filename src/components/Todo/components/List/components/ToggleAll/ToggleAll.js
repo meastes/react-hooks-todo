@@ -9,6 +9,6 @@ export default ({ isAllCompleted, onToggleAll }) => (
       onChange={onToggleAll}
       checked={isAllCompleted}
     />
-    <label labelfor="toggle-all">Mark all as complete</label>
+    <label htmlFor="toggle-all">Mark all as complete</label>
   </>
 );

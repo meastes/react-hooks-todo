@@ -44,7 +44,7 @@ export default class Todo extends React.Component {
     if (this.isAllCompleted) {
       stateChanges.completed = [];
     } else {
-      stateChanges.completed = todos.map((todo) => todo.id);
+      stateChanges.completed = todos.map(({ id }) => id);
     }
 
     this.setState(stateChanges);
