@@ -41,6 +41,14 @@ export default class Todo extends React.Component {
     this.setState(stateChanges);
   };
 
+  get numberTotalItems() {
+    return this.state.todos.length;
+  }
+
+  get numberItemsLeft() {
+    return this.state.todos.length - this.state.completed.length;
+  }
+
   get isAllCompleted() {
     return this.state.todos.length === this.state.completed.length;
   }
@@ -67,7 +75,7 @@ export default class Todo extends React.Component {
           />
         </main>
         <footer className="footer">
-          <Footer />
+          <Footer totalItems={this.numberTotalItems} itemsLeft={this.numberItemsLeft} />
         </footer>
       </section>
     );
