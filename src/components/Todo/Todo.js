@@ -1,9 +1,9 @@
-import React from 'react';
-import List from './components/List';
-import NewTodo from './components/NewTodo';
-import Footer from './components/Footer';
 import { uniqueId as _uniqueId } from 'lodash';
 import PropTypes from 'prop-types';
+import React from 'react';
+import Footer from './components/Footer';
+import List from './components/List';
+import NewTodo from './components/NewTodo';
 
 const DEFAULT_TODOS = [
   { id: _uniqueId(), description: 'Taste JavaScript' },
@@ -26,6 +26,17 @@ export default class Todo extends React.Component {
   handleAddTodo = (description) => {
     const { todos: originalTodos } = this.state;
     const todos = [...originalTodos, { id: _uniqueId(), description }];
+    this.setState({ todos });
+  };
+
+  handleUpdateTodo = (id, description) => {
+    const todos = this.state.todos.map((todo) => {
+      if (todo.id === id) {
+        return { id, description };
+      }
+      return todo;
+    });
+
     this.setState({ todos });
   };
 
@@ -111,6 +122,7 @@ export default class Todo extends React.Component {
             onToggleTodo={this.hangleToggleTodo}
             onToggleAll={this.handleToggleAll}
             onRemoveTodo={this.handleRemoveTodo}
+            onUpdateTodo={this.handleUpdateTodo}
           />
         </main>
         <footer className="footer">
