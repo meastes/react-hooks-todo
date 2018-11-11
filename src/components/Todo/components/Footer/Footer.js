@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default ({ totalItems, itemsLeft }) => {
+export default ({ totalItems, itemsLeft, onRemoveCompleted }) => {
   let itemText = 'items';
   if (itemsLeft === 1) {
     itemText = 'item';
@@ -24,7 +24,11 @@ export default ({ totalItems, itemsLeft }) => {
           <a href="#/completed">Completed</a>
         </li>
       </ul>
-      {itemsLeft < totalItems && <button className="clear-completed">Clear completed</button>}
+      {itemsLeft < totalItems && (
+        <button className="clear-completed" onClick={onRemoveCompleted}>
+          Clear completed
+        </button>
+      )}
     </>
   );
 };

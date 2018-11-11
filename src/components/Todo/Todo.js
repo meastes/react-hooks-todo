@@ -42,13 +42,15 @@ export default class Todo extends React.Component {
   };
 
   handleRemoveTodo = (id) => {
-    const todos = this.state.todos.filter((todo) => id !== todo.id);
-    const completed = this.state.completed.filter((completedId) => id !== completedId);
+    const { todos: originalTodos, completed: originalCompleted } = this.state;
+    const todos = originalTodos.filter(({ id: todoId }) => id !== todoId);
+    const completed = originalCompleted.filter((completedId) => id !== completedId);
     this.setState({ todos, completed });
   };
 
   handleRemoveCompleted = () => {
-    const todos = this.state.todos.filter((todo) => ~todo.completed);
+    const { todos: originalTodos, completed } = this.state;
+    const todos = originalTodos.filter(({ id }) => !completed.includes(id));
     this.setState({ todos, completed: [] });
   };
 
@@ -87,7 +89,11 @@ export default class Todo extends React.Component {
           />
         </main>
         <footer className="footer">
-          <Footer totalItems={this.numberTotalItems} itemsLeft={this.numberItemsLeft} />
+          <Footer
+            totalItems={this.numberTotalItems}
+            itemsLeft={this.numberItemsLeft}
+            onRemoveCompleted={this.handleRemoveCompleted}
+          />
         </footer>
       </section>
     );
