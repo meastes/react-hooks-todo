@@ -82,7 +82,7 @@ export default class Todo extends React.Component {
 
     return (
       <section className="todoapp">
-        <header class="header">
+        <header className="header">
           <h1>todos</h1>
           <NewTodo onNewTodo={this.handleAddTodo} />
         </header>

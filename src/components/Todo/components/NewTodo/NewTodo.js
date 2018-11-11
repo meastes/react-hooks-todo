@@ -26,7 +26,7 @@ export default class NewTodo extends React.Component {
         value={description}
         onChange={this.handleChangeDescription}
         onKeyPress={this.handleKeypress}
-        autofocus
+        autoFocus
       />
     );
   }

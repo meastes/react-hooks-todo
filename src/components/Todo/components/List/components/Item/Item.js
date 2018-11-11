@@ -15,7 +15,7 @@ export default ({ description, completed, editing, onToggle, onRemove }) => {
         <label>{description}</label>
         <button className="destroy" onClick={onRemove} />
       </div>
-      <input className="edit" value="Create a TodoMVC template" />
+      <input className="edit" defaultValue="Create a TodoMVC template" />
     </li>
   );
 };

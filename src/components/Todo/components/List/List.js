@@ -11,6 +11,7 @@ export default ({ todos, isAllCompleted, onToggleTodo, onToggleAll, onRemoveTodo
         const onRemove = () => onRemoveTodo(id);
         return (
           <Item
+            key={id}
             description={description}
             completed={completed}
             onToggle={onToggle}
