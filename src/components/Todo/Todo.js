@@ -22,7 +22,7 @@ export default class Todo extends React.Component {
     this.setState({ todos });
   };
 
-  hangleToddleTodo = (id) => {
+  hangleToggleTodo = (id) => {
     const { completed } = this.state;
     const stateChanges = {};
 
@@ -90,7 +90,7 @@ export default class Todo extends React.Component {
           <List
             todos={todos}
             isAllCompleted={this.isAllCompleted}
-            onToggleTodo={this.hangleToddleTodo}
+            onToggleTodo={this.hangleToggleTodo}
             onToggleAll={this.handleToggleAll}
             onRemoveTodo={this.handleRemoveTodo}
           />
