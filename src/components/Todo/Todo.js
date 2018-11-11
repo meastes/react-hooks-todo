@@ -2,17 +2,24 @@ import React from 'react';
 import List from './components/List';
 import NewTodo from './components/NewTodo';
 import Footer from './components/Footer';
+import { uniqueId as _uniqueId } from 'lodash';
 
 const DEFAULT_TODOS = [
-  { id: 0, description: 'Taste JavaScript' },
-  { id: 1, description: 'Buy a unicorn' },
-  { id: 2, description: 'World domination' },
+  { id: _uniqueId(), description: 'Taste JavaScript' },
+  { id: _uniqueId(), description: 'Buy a unicorn' },
+  { id: _uniqueId(), description: 'World domination' },
 ];
 
 export default class Todo extends React.Component {
   state = {
     todos: DEFAULT_TODOS,
     completed: [0],
+  };
+
+  handleAddTodo = (description) => {
+    const { todos: originalTodos } = this.state;
+    const todos = [...originalTodos, { id: _uniqueId(), description }];
+    this.setState({ todos });
   };
 
   hangleToddleTodo = (id) => {
@@ -77,7 +84,7 @@ export default class Todo extends React.Component {
       <section className="todoapp">
         <header class="header">
           <h1>todos</h1>
-          <NewTodo />
+          <NewTodo onNewTodo={this.handleAddTodo} />
         </header>
         <main className="main">
           <List
