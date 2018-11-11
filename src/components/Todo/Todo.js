@@ -28,6 +28,23 @@ export default class Todo extends React.Component {
     this.setState(stateChanges);
   };
 
+  handleToggleAll = () => {
+    const { todos } = this.state;
+    const stateChanges = {};
+
+    if (this.isAllCompleted) {
+      stateChanges.completed = [];
+    } else {
+      stateChanges.completed = todos.map((todo) => todo.id);
+    }
+
+    this.setState(stateChanges);
+  };
+
+  get isAllCompleted() {
+    return this.state.todos.length === this.state.completed.length;
+  }
+
   render() {
     const { todos: originalTodos, completed } = this.state;
     const todos = originalTodos.map((todo) => ({
@@ -42,7 +59,12 @@ export default class Todo extends React.Component {
           <NewTodo />
         </header>
         <main className="main">
-          <List todos={todos} onTodoToggle={this.handleTodoToggle} />
+          <List
+            todos={todos}
+            isAllCompleted={this.isAllCompleted}
+            onTodoToggle={this.handleTodoToggle}
+            onToggleAll={this.handleToggleAll}
+          />
         </main>
         <footer className="footer">
           <Footer />
