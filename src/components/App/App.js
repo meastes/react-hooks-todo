@@ -1,28 +1,35 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import TodoList from '../TodoList';
+import 'todomvc-app-css/index.css';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
+export default () => (
+  <div className="todoapp">
+    <header class="header">
+      <h1>todos</h1>
+      <input className="new-todo" placeholder="What needs to be done?" autofocus />
+    </header>
+    <main className="main">
+      <TodoList />
+    </main>
+    <footer className="footer">
+      <span className="todo-count">
+        <strong>0</strong> item left
+      </span>
+      <ul className="filters">
+        <li>
+          <a className="selected" href="#/">
+            All
           </a>
-        </header>
-      </div>
-    );
-  }
-}
-
-export default App;
+        </li>
+        <li>
+          <a href="#/active">Active</a>
+        </li>
+        <li>
+          <a href="#/completed">Completed</a>
+        </li>
+      </ul>
+      {/* Hidden if no completed items are left ↓ */}
+      <button className="clear-completed">Clear completed</button>
+    </footer>
+  </div>
+);
