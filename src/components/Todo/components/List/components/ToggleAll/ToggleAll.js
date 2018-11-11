@@ -1,6 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
-export default ({ isAllCompleted, onToggleAll }) => (
+const ToggleAll = ({ isAllCompleted, onToggleAll }) => (
   <>
     <input
       id="toggle-all"
@@ -12,3 +13,10 @@ export default ({ isAllCompleted, onToggleAll }) => (
     <label htmlFor="toggle-all">Mark all as complete</label>
   </>
 );
+
+ToggleAll.propTypes = {
+  isAllCompleted: PropTypes.bool.isRequired,
+  onToggleAll: PropTypes.func.isRequired,
+};
+
+export default ToggleAll;

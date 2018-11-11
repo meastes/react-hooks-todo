@@ -3,6 +3,7 @@ import List from './components/List';
 import NewTodo from './components/NewTodo';
 import Footer from './components/Footer';
 import { uniqueId as _uniqueId } from 'lodash';
+import PropTypes from 'prop-types';
 
 const DEFAULT_TODOS = [
   { id: _uniqueId(), description: 'Taste JavaScript' },
@@ -16,6 +17,10 @@ export default class Todo extends React.Component {
   state = {
     todos: DEFAULT_TODOS,
     completed: DEFAULT_COMPLETED,
+  };
+
+  static propTypes = {
+    show: PropTypes.oneOf(['active', 'completed']),
   };
 
   handleAddTodo = (description) => {

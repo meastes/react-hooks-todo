@@ -1,8 +1,8 @@
 import React from 'react';
-import 'todomvc-app-css/index.css';
-import Todo from '../Todo';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
+import 'todomvc-app-css/index.css';
 import * as RouteConstants from '../../constants/Route';
+import Todo from '../Todo';
 
 const Index = () => <Todo />;
 const Active = () => <Todo show="active" />;

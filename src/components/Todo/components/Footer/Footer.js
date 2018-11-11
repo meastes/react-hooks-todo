@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import * as RouteConstants from '../../../../constants/Route';
 import NavItem from './components/NavItem';
@@ -28,6 +29,12 @@ const Footer = ({ totalItems, itemsLeft, onRemoveCompleted }) => {
       )}
     </>
   );
+};
+
+Footer.propTypes = {
+  totalItems: PropTypes.number.isRequired,
+  itemsLeft: PropTypes.number.isRequired,
+  onRemoveCompleted: PropTypes.func.isRequired,
 };
 
 export default Footer;

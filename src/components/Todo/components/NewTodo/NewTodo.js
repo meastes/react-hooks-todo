@@ -1,8 +1,13 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 export default class NewTodo extends React.Component {
   state = {
     description: '',
+  };
+
+  static propTypes = {
+    onNewTodo: PropTypes.func.isRequired,
   };
 
   handleChangeDescription = (event) => {
