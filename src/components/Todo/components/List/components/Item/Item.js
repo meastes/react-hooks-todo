@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default ({ description, completed, editing }) => {
+export default ({ description, completed, editing, onToggle }) => {
   let className = '';
   if (completed) {
     className = 'completed';
@@ -11,7 +11,7 @@ export default ({ description, completed, editing }) => {
   return (
     <li className={className}>
       <div className="view">
-        <input className="toggle" type="checkbox" checked={completed} />
+        <input className="toggle" type="checkbox" checked={completed} onChange={onToggle} />
         <label>{description}</label>
         <button className="destroy" />
       </div>
