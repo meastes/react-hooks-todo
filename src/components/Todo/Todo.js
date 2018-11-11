@@ -10,10 +10,12 @@ const DEFAULT_TODOS = [
   { id: _uniqueId(), description: 'World domination' },
 ];
 
+const DEFAULT_COMPLETED = [DEFAULT_TODOS[0].id];
+
 export default class Todo extends React.Component {
   state = {
     todos: DEFAULT_TODOS,
-    completed: [0],
+    completed: DEFAULT_COMPLETED,
   };
 
   handleAddTodo = (description) => {
