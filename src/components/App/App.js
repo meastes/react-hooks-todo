@@ -1,14 +1,14 @@
-import { uniqueId as _uniqueId } from 'lodash';
 import React from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import 'todomvc-app-css/index.css';
+import uuid from 'uuid/v4';
 import * as RouteConstants from '../../constants/Route';
 import Todo from '../Todo';
 
 const DEFAULT_TODOS = {
-  [_uniqueId()]: { description: 'Taste JavaScript', completed: true },
-  [_uniqueId()]: { description: 'Buy a unicorn', completed: false },
-  [_uniqueId()]: { description: 'World domination', completed: false },
+  [uuid()]: { description: 'Taste JavaScript', completed: true },
+  [uuid()]: { description: 'Buy a unicorn', completed: false },
+  [uuid()]: { description: 'World domination', completed: false },
 };
 
 function handleListChange(todos) {

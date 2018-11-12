@@ -1,6 +1,6 @@
-import { uniqueId as _uniqueId } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
+import uuid from 'uuid/v4';
 import Footer from './components/Footer';
 import List from './components/List';
 import NewTodo from './components/NewTodo';
@@ -24,7 +24,7 @@ export default class Todo extends React.Component {
 
   handleAddTodo = (description) => {
     const { todos: originalTodos } = this.state;
-    const todos = { ...originalTodos, [_uniqueId()]: { description, completed: false } };
+    const todos = { ...originalTodos, [uuid()]: { description, completed: false } };
     this.setState({ todos });
   };
 
