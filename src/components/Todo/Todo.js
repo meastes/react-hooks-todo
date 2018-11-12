@@ -1,132 +1,90 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import uuid from 'uuid/v4';
+import React, { useEffect, useState } from 'react';
 import Footer from './components/Footer';
 import List from './components/List';
 import NewTodo from './components/NewTodo';
+import { useAddTodos, useRemoveTodos, useToggleTodos, useUpdateTodos } from './hooks';
 
-export default class Todo extends React.Component {
-  state = {
-    todos: this.props.todos,
-  };
+const Todo = ({ todos: todosProp, show, onListChange = () => {} }) => {
+  const [todos, setTodos] = useState(todosProp);
+  const todosToDisplay = getTodosToDisplay(todos, show);
+  useEffect(() => {
+    onListChange(todos);
+  });
 
-  static propTypes = {
-    todos: PropTypes.object.isRequired,
-    show: PropTypes.oneOf(['active', 'completed']),
-    onListChange: PropTypes.func,
-  };
+  const { handleAddTodo } = useAddTodos(todos, setTodos);
+  const { handleUpdateTodo } = useUpdateTodos(todos, setTodos);
+  const { hangleToggleTodo, handleToggleAll } = useToggleTodos(
+    todos,
+    setTodos,
+    isAllCompleted(todos),
+  );
+  const { handleRemoveTodo, handleRemoveCompleted } = useRemoveTodos(todos, setTodos);
 
-  componentDidUpdate() {
-    if (this.props.onListChange) {
-      this.props.onListChange(this.state.todos);
-    }
-  }
+  return (
+    <section className="todoapp">
+      <header className="header">
+        <h1>todos</h1>
+        <NewTodo onNewTodo={handleAddTodo} />
+      </header>
+      <main className="main">
+        <List
+          todos={todosToDisplay}
+          isAllCompleted={isAllCompleted(todos)}
+          onToggleTodo={hangleToggleTodo}
+          onToggleAll={handleToggleAll}
+          onRemoveTodo={handleRemoveTodo}
+          onUpdateTodo={handleUpdateTodo}
+        />
+      </main>
+      <footer className="footer">
+        <Footer
+          totalItems={numberTotalItems(todos)}
+          itemsLeft={numberItemsLeft(todos)}
+          onRemoveCompleted={handleRemoveCompleted}
+        />
+      </footer>
+    </section>
+  );
+};
 
-  handleAddTodo = (description) => {
-    const { todos: originalTodos } = this.state;
-    const todos = { ...originalTodos, [uuid()]: { description, completed: false } };
-    this.setState({ todos });
-  };
+function getTodosToDisplay(todos, show) {
+  let todosToDisplay = Object.entries(todos).map(([id, todo]) => ({ id, ...todo }));
 
-  handleUpdateTodo = (id, description) => {
-    const todos = { ...this.state.todos };
-    todos[id].description = description;
-
-    this.setState({ todos });
-  };
-
-  hangleToggleTodo = (id) => {
-    const todos = { ...this.state.todos };
-    todos[id].completed = !this.state.todos[id].completed;
-
-    this.setState({ todos });
-  };
-
-  handleToggleAll = () => {
-    const { todos: originalTodos } = this.state;
-
-    const todos = Object.entries(originalTodos).reduce((newTodos, [id, todo]) => {
-      const updatedTodo = { ...todo, completed: !this.isAllCompleted };
-      return { ...newTodos, [id]: updatedTodo };
-    }, {});
-
-    this.setState({ todos });
-  };
-
-  handleRemoveTodo = (id) => {
-    const todos = { ...this.state.todos };
-    delete todos[id];
-    this.setState({ todos });
-  };
-
-  handleRemoveCompleted = () => {
-    const { todos: originalTodos } = this.state;
-
-    const todos = Object.entries(originalTodos).reduce((newTodos, [id, todo]) => {
-      if (todo.completed) {
-        return newTodos;
+  if (show) {
+    todosToDisplay = todosToDisplay.filter(({ completed }) => {
+      if (show === 'active') {
+        return !completed;
+      } else if (show === 'completed') {
+        return completed;
       }
-      return { ...newTodos, [id]: todo };
-    }, {});
-
-    this.setState({ todos });
-  };
-
-  get numberTotalItems() {
-    return Object.keys(this.state.todos).length;
+      throw Error(`Invalid show prop: ${show}`);
+    });
   }
 
-  get numberCompletedItems() {
-    return Object.values(this.state.todos).filter(({ completed }) => completed).length;
-  }
-
-  get numberItemsLeft() {
-    return this.numberTotalItems - this.numberCompletedItems;
-  }
-
-  get isAllCompleted() {
-    return this.numberTotalItems === this.numberCompletedItems;
-  }
-
-  render() {
-    const { show } = this.props;
-    let todos = Object.entries(this.state.todos).map(([id, todo]) => ({ id, ...todo }));
-
-    if (show) {
-      todos = todos.filter(({ completed }) => {
-        if (show === 'active') {
-          return !completed;
-        } else if (show === 'completed') {
-          return completed;
-        }
-        throw Error(`Invalid show prop: ${show}`);
-      });
-    }
-
-    return (
-      <section className="todoapp">
-        <header className="header">
-          <h1>todos</h1>
-          <NewTodo onNewTodo={this.handleAddTodo} />
-        </header>
-        <main className="main">
-          <List
-            todos={todos}
-            isAllCompleted={this.isAllCompleted}
-            onToggleTodo={this.hangleToggleTodo}
-            onToggleAll={this.handleToggleAll}
-            onRemoveTodo={this.handleRemoveTodo}
-            onUpdateTodo={this.handleUpdateTodo}
-          />
-        </main>
-        <footer className="footer">
-          <Footer
-            totalItems={this.numberTotalItems}
-            itemsLeft={this.numberItemsLeft}
-            onRemoveCompleted={this.handleRemoveCompleted}
-          />
-        </footer>
-      </section>
-    );
-  }
+  return todosToDisplay;
 }
+
+function numberTotalItems(todos) {
+  return Object.keys(todos).length;
+}
+
+function numberCompletedItems(todos) {
+  return Object.values(todos).filter(({ completed }) => completed).length;
+}
+
+function numberItemsLeft(todos) {
+  return numberTotalItems(todos) - numberCompletedItems(todos);
+}
+
+function isAllCompleted(todos) {
+  return numberTotalItems(todos) === numberCompletedItems(todos);
+}
+
+Todo.propTypes = {
+  todos: PropTypes.object.isRequired,
+  show: PropTypes.oneOf(['active', 'completed']),
+  onListChange: PropTypes.func,
+};
+
+export default Todo;
