@@ -1,29 +1,16 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
+import { useEditMode } from './hooks';
 
 const Item = ({ children, completed, onToggle, onRemove, onUpdate }) => {
-  const [editing, setEditing] = useState(false);
-  const [updatedDescription, setUpdatedDescription] = useState(children);
-
-  function handleUpdateDescription(event) {
-    setUpdatedDescription(event.currentTarget.value);
-  }
-
-  function handleDoubleClick() {
-    setEditing(true);
-  }
-
-  function handleBlur() {
-    onUpdate(this.state.updatedDescription);
-    setEditing(false);
-  }
-
-  function handleKeypress(event) {
-    if (event.key === 'Enter') {
-      onUpdate(updatedDescription);
-      setEditing(false);
-    }
-  }
+  const {
+    editing,
+    updatedDescription,
+    handleUpdateDescription,
+    handleDoubleClick,
+    handleBlur,
+    handleKeypress,
+  } = useEditMode(children, onUpdate);
 
   let className = '';
   if (editing) {

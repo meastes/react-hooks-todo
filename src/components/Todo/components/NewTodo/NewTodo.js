@@ -1,19 +1,9 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
+import { useDescription } from './hooks';
 
 const NewTodo = ({ onNewTodo }) => {
-  const [description, setDescription] = useState('');
-
-  function handleChangeDescription(event) {
-    setDescription(event.currentTarget.value);
-  }
-
-  function handleKeypress(event) {
-    if (event.key === 'Enter') {
-      onNewTodo(description);
-      setDescription('');
-    }
-  }
+  const { description, handleChangeDescription, handleKeypress } = useDescription(onNewTodo);
 
   return (
     <input
