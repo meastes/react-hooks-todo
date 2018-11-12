@@ -5,99 +5,93 @@ import Footer from './components/Footer';
 import List from './components/List';
 import NewTodo from './components/NewTodo';
 
-const DEFAULT_TODOS = [
-  { id: _uniqueId(), description: 'Taste JavaScript' },
-  { id: _uniqueId(), description: 'Buy a unicorn' },
-  { id: _uniqueId(), description: 'World domination' },
-];
-
-const DEFAULT_COMPLETED = [DEFAULT_TODOS[0].id];
-
 export default class Todo extends React.Component {
   state = {
-    todos: DEFAULT_TODOS,
-    completed: DEFAULT_COMPLETED,
+    todos: this.props.todos,
   };
 
   static propTypes = {
+    todos: PropTypes.object.isRequired,
     show: PropTypes.oneOf(['active', 'completed']),
+    onListChange: PropTypes.func,
   };
+
+  componentDidUpdate() {
+    if (this.props.onListChange) {
+      this.props.onListChange(this.state.todos);
+    }
+  }
 
   handleAddTodo = (description) => {
     const { todos: originalTodos } = this.state;
-    const todos = [...originalTodos, { id: _uniqueId(), description }];
+    const todos = { ...originalTodos, [_uniqueId()]: { description, completed: false } };
     this.setState({ todos });
   };
 
   handleUpdateTodo = (id, description) => {
-    const todos = this.state.todos.map((todo) => {
-      if (todo.id === id) {
-        return { id, description };
-      }
-      return todo;
-    });
+    const updatedTodo = { ...this.state.todos[id], description };
+    const todos = { ...this.state.todos, [id]: updatedTodo };
 
     this.setState({ todos });
   };
 
   hangleToggleTodo = (id) => {
-    const { completed } = this.state;
-    const stateChanges = {};
+    const updatedTodo = { ...this.state.todos[id], completed: !this.state.todos[id].completed };
+    const todos = { ...this.state.todos, [id]: updatedTodo };
 
-    if (completed.includes(id)) {
-      stateChanges.completed = completed.filter((completedId) => id !== completedId);
-    } else {
-      stateChanges.completed = [...completed, id];
-    }
-
-    this.setState(stateChanges);
+    this.setState({ todos });
   };
 
   handleToggleAll = () => {
-    const { todos } = this.state;
-    const stateChanges = {};
+    const { todos: originalTodos } = this.state;
 
-    if (this.isAllCompleted) {
-      stateChanges.completed = [];
-    } else {
-      stateChanges.completed = todos.map(({ id }) => id);
-    }
+    const todos = Object.entries(originalTodos).reduce((newTodos, [id, todo]) => {
+      const updatedTodo = { ...todo, completed: !this.isAllCompleted };
+      return { ...newTodos, [id]: updatedTodo };
+    }, {});
 
-    this.setState(stateChanges);
+    this.setState({ todos });
   };
 
   handleRemoveTodo = (id) => {
-    const { todos: originalTodos, completed: originalCompleted } = this.state;
-    const todos = originalTodos.filter(({ id: todoId }) => id !== todoId);
-    const completed = originalCompleted.filter((completedId) => id !== completedId);
-    this.setState({ todos, completed });
+    const todos = { ...this.state.todos };
+    delete todos[id];
+    this.setState({ todos });
   };
 
   handleRemoveCompleted = () => {
-    const { todos: originalTodos, completed } = this.state;
-    const todos = originalTodos.filter(({ id }) => !completed.includes(id));
-    this.setState({ todos, completed: [] });
+    const { todos: originalTodos } = this.state;
+
+    const todos = Object.entries(originalTodos).reduce((newTodos, [id, todo]) => {
+      if (todo.completed) {
+        return newTodos;
+      }
+      return { ...newTodos, [id]: todo };
+    }, {});
+
+    this.setState({ todos });
   };
 
   get numberTotalItems() {
-    return this.state.todos.length;
+    return Object.keys(this.state.todos).length;
+  }
+
+  get numberCompletedItems() {
+    return Object.values(this.state.todos).filter(({ completed }) => completed).length;
   }
 
   get numberItemsLeft() {
-    return this.state.todos.length - this.state.completed.length;
+    return this.numberTotalItems - this.numberCompletedItems;
   }
 
   get isAllCompleted() {
-    return this.state.todos.length === this.state.completed.length;
+    return this.numberTotalItems === this.numberCompletedItems;
   }
 
   render() {
     const { show } = this.props;
-    const { todos: originalTodos, completed } = this.state;
-    let todos = originalTodos.map((todo) => ({
-      ...todo,
-      completed: completed.includes(todo.id),
-    }));
+    let todos = Object.entries(this.state.todos).map(([id, todo]) => ({ id, ...todo }));
+
     if (show) {
       todos = todos.filter(({ completed }) => {
         if (show === 'active') {
