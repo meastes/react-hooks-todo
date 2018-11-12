@@ -29,15 +29,15 @@ export default class Todo extends React.Component {
   };
 
   handleUpdateTodo = (id, description) => {
-    const updatedTodo = { ...this.state.todos[id], description };
-    const todos = { ...this.state.todos, [id]: updatedTodo };
+    const todos = { ...this.state.todos };
+    todos[id].description = description;
 
     this.setState({ todos });
   };
 
   hangleToggleTodo = (id) => {
-    const updatedTodo = { ...this.state.todos[id], completed: !this.state.todos[id].completed };
-    const todos = { ...this.state.todos, [id]: updatedTodo };
+    const todos = { ...this.state.todos };
+    todos[id].completed = !this.state.todos[id].completed;
 
     this.setState({ todos });
   };
