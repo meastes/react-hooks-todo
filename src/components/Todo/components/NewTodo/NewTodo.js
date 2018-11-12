@@ -1,37 +1,34 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 
-export default class NewTodo extends React.Component {
-  state = {
-    description: '',
-  };
+const NewTodo = ({ onNewTodo }) => {
+  const [description, setDescription] = useState('');
 
-  static propTypes = {
-    onNewTodo: PropTypes.func.isRequired,
-  };
-
-  handleChangeDescription = (event) => {
-    this.setState({ description: event.currentTarget.value });
-  };
-
-  handleKeypress = (event) => {
-    if (event.key === 'Enter') {
-      this.props.onNewTodo(this.state.description);
-      this.setState({ description: '' });
-    }
-  };
-
-  render() {
-    const { description } = this.state;
-    return (
-      <input
-        className="new-todo"
-        placeholder="What needs to be done?"
-        value={description}
-        onChange={this.handleChangeDescription}
-        onKeyPress={this.handleKeypress}
-        autoFocus
-      />
-    );
+  function handleChangeDescription(event) {
+    setDescription(event.currentTarget.value);
   }
-}
+
+  function handleKeypress(event) {
+    if (event.key === 'Enter') {
+      onNewTodo(description);
+      setDescription('');
+    }
+  }
+
+  return (
+    <input
+      className="new-todo"
+      placeholder="What needs to be done?"
+      value={description}
+      onChange={handleChangeDescription}
+      onKeyPress={handleKeypress}
+      autoFocus
+    />
+  );
+};
+
+NewTodo.propTypes = {
+  onNewTodo: PropTypes.func.isRequired,
+};
+
+export default NewTodo;
